@@ -1,54 +1,48 @@
-import { useEffect, useState } from 'react';
-import Description from './components/Description';
-import Options from './components/Options';
-import Feedback from './components/Feedback';
-import Notification from './components/Notification';
+import React, { useState } from 'react'
+import Feedback from './components/Feedback'
+import Options from './components/Options'
+import Notification from './components/Notification'
 
-const App = () => {
-  const [feedback, setFeedback] = useState(() => {
-    const stored = localStorage.getItem('feedback');
-    return stored ? JSON.parse(stored) : { good: 0, neutral: 0, bad: 0 };
-  });
-
-  const totalFeedback = feedback.good + feedback.neutral + feedback.bad;
-  const positivePercentage = totalFeedback
-    ? Math.round((feedback.good / totalFeedback) * 100)
-    : 0;
-
-  useEffect(() => {
-    localStorage.setItem('feedback', JSON.stringify(feedback));
-  }, [feedback]);
+function App() {
+  const [feedback, setFeedback] = useState({
+    good: 0,
+    neutral: 0,
+    bad: 0,
+  })
 
   const updateFeedback = (type) => {
-    setFeedback(prev => ({ ...prev, [type]: prev[type] + 1 }));
-  };
+    setFeedback(prev => ({ ...prev, [type]: prev[type] + 1 }))
+  }
+
+  const totalFeedback = feedback.good + feedback.neutral + feedback.bad
 
   const resetFeedback = () => {
-    setFeedback({ good: 0, neutral: 0, bad: 0 });
-  };
+    setFeedback({ good: 0, neutral: 0, bad: 0 })
+  }
 
   return (
-    <div className="app">
+    <div>
       <h1>Sip Happens Café</h1>
-      <Description />
+      <p>Please leave your feedback about our service by selecting one of the options below.</p>
+
       <Options
+        options={['good', 'neutral', 'bad']}
         onLeaveFeedback={updateFeedback}
+        totalFeedback={totalFeedback}
         onReset={resetFeedback}
-        hasFeedback={totalFeedback > 0}
       />
+
       {totalFeedback > 0 ? (
         <Feedback
-          good={feedback.good}
-          neutral={feedback.neutral}
-          bad={feedback.bad}
+          feedback={feedback}
           total={totalFeedback}
-          positive={positivePercentage}
+          positivePercentage={Math.round((feedback.good / totalFeedback) * 100)}
         />
       ) : (
-        <Notification message="No feedback yet" />
+        <Notification message="There is no feedback" />
       )}
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
