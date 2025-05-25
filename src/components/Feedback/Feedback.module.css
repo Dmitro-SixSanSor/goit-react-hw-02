@@ -1,0 +1,19 @@
+.feedback {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.feedbackItem {
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 150px;
+}
+
+.feedbackTitle {
+  text-transform: capitalize;
+  margin: 0;
+}
